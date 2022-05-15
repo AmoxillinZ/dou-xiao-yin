@@ -14,7 +14,7 @@ import (
 var db *gorm.DB
 
 func InitDefaultDbEngine() {
-	dsn := "root:root@tcp(127.0.0.1:3306)/dou_xiao_yin?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:nbroot@tcp(202.204.100.175:3306)/dou_xiao_yin?charset=utf8mb4&parseTime=True&loc=Local"
 	// db为单例
 	if db == nil {
 		var err error
