@@ -1,0 +1,19 @@
+/**
+ * @Author: Amo
+ * @Description:
+ * @Date: 2022/5/12 10:35
+ */
+
+package model
+
+type User struct {
+	Id            int    `gorm:"column:id;type:int(11);primary_key" json:"id"`
+	Name          string `gorm:"column:name;type:varchar(255)" json:"name"`
+	FollowCount   int    `gorm:"column:follow_count;type:int(11)" json:"follow_count"`
+	FollowerCount int    `gorm:"column:follower_count;type:int(11)" json:"follower_count"`
+	Token         string `gorm:"column:token;type:varchar(255)" json:"token"`
+}
+
+func (m *User) TableName() string {
+	return "user"
+}
