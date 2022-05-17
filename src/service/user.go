@@ -20,7 +20,7 @@ func UserLogin(username string, password string) (*model.User, error) {
 		return nil, errors.New("用户密码错误")
 	}
 
-	//为该用户生成 Token, 这里回头使用盐值 MD5 来生成 token
+	//为该用户生成 Token, 这里回头使用 jwt? 来生成 token
 	token := username + password
 
 	// 写入 Token

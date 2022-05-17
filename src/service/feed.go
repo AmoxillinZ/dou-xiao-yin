@@ -54,7 +54,7 @@ func GetVideoList() []Video {
 		// model.User ->
 		author := User{
 			Id:            author_ori.Id,
-			Name:          author_ori.Username,
+			Name:          author_ori.Name,
 			FollowCount:   author_ori.FollowerCount,
 			FollowerCount: author_ori.FollowCount,
 			IsFollow:      false, //待补充
