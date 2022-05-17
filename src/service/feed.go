@@ -8,6 +8,7 @@ package service
 
 import (
 	"MyProject/src/mapper"
+	"fmt"
 )
 
 type Response struct {
@@ -46,11 +47,14 @@ func GetVideoList() []Video {
 	videos_ori := mapper.GetVideos()
 	for _, video_ori := range videos_ori {
 		// author_ori:model.User类型
-		author_ori := mapper.GetUserById(video_ori.AuthorId)
+		author_ori, err := mapper.GetUserById(video_ori.AuthorId)
+		if err != nil {
+			fmt.Println(err)
+		}
 		// model.User ->
 		author := User{
 			Id:            author_ori.Id,
-			Name:          author_ori.Name,
+			Name:          author_ori.Username,
 			FollowCount:   author_ori.FollowerCount,
 			FollowerCount: author_ori.FollowCount,
 			IsFollow:      false, //待补充
@@ -66,6 +70,5 @@ func GetVideoList() []Video {
 		}
 		videos = append(videos, video)
 	}
-
 	return videos
 }
