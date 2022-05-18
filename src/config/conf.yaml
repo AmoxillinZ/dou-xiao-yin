@@ -1,0 +1,8 @@
+database:
+  dbtype: mysql
+  host: 202.204.100.175
+  port: 3306
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  dbname: dou_xiao_yin
+  username: root
+  password: nbroot

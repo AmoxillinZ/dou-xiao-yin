@@ -1,9 +1,10 @@
-module MyProject
+module dou-xiao-yin
 
 go 1.18
 
 require (
 	github.com/gin-gonic/gin v1.7.7
+	gopkg.in/yaml.v2 v2.2.8
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.5
 )
@@ -28,5 +29,4 @@ require (
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/yaml.v2 v2.2.8 // indirect
 )

@@ -7,8 +7,8 @@
 package mapper
 
 import (
-	"MyProject/src/config"
-	"MyProject/src/model"
+	"dou-xiao-yin/src/config"
+	"dou-xiao-yin/src/model"
 )
 
 func GetUserById(id int) *model.User {

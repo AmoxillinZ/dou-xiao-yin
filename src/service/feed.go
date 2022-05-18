@@ -7,7 +7,8 @@
 package service
 
 import (
-	"MyProject/src/mapper"
+	"dou-xiao-yin/src/mapper"
+	"fmt"
 )
 
 type Response struct {
@@ -34,14 +35,14 @@ type Comment struct {
 
 type User struct {
 	Id            int    `json:"id,omitempty"`
-	Name          string `json:"name,omitempty"`
+	Username      string `json:"username,omitempty"`
 	FollowCount   int    `json:"follow_count,omitempty"`
 	FollowerCount int    `json:"follower_count,omitempty"`
 	IsFollow      bool   `json:"is_follow,omitempty"`
 }
 
-func GetVideoList() []Video {
-	videos := make([]Video, 0)
+func GetVideoList() []*Video {
+	videos := make([]*Video, 0)
 	// videos_ori：model.Video类型
 	videos_ori := mapper.GetVideos()
 	for _, video_ori := range videos_ori {
@@ -50,7 +51,7 @@ func GetVideoList() []Video {
 		// model.User ->
 		author := User{
 			Id:            author_ori.Id,
-			Name:          author_ori.Name,
+			Username:      author_ori.Username,
 			FollowCount:   author_ori.FollowerCount,
 			FollowerCount: author_ori.FollowCount,
 			IsFollow:      false, //待补充
@@ -58,14 +59,29 @@ func GetVideoList() []Video {
 		video := Video{
 			Id:            video_ori.Id,
 			Author:        author,
-			PlayUrl:       video_ori.PlayUrl,
-			CoverUrl:      video_ori.CoverUrl,
 			FavoriteCount: video_ori.FavoriteCount,
 			CommentCount:  video_ori.CommentCount,
 			IsFavorite:    false, //待补充
 		}
-		videos = append(videos, video)
+		videos = append(videos, &video)
 	}
+	// 处理播放和封面路由
+	parseUrl(videos)
 
 	return videos
+}
+
+const (
+	ip   = "172.20.6.84"
+	port = 8080
+)
+
+func parseUrl(videos []*Video) {
+	for _, video := range videos {
+		videoUrl := fmt.Sprintf("http://%s:%d/douyin/resources/video/%d/%d", ip, port, video.Author.Id, video.Id)
+		coverUrl := fmt.Sprintf("http://%s:%d/douyin/resources/cover/%d/%d", ip, port, video.Author.Id, video.Id)
+		video.PlayUrl = videoUrl
+		video.CoverUrl = coverUrl
+	}
+
 }

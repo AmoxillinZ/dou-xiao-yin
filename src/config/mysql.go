@@ -7,6 +7,7 @@
 package config
 
 import (
+	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -14,7 +15,11 @@ import (
 var db *gorm.DB
 
 func InitDefaultDbEngine() {
-	dsn := "root:nbroot@tcp(202.204.100.175:3306)/dou_xiao_yin?charset=utf8mb4&parseTime=True&loc=Local"
+	dc := GetConf().Database
+	fmt.Println("dc = ", dc)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s", dc.Username, dc.Password, dc.Host, dc.Port, dc.Dbname, dc.Config)
+	fmt.Println("dsn = ", dsn)
+	//dsn := "root:nbroot@tcp(202.204.100.175:3306)/dou_xiao_yin?charset=utf8mb4&parseTime=True&loc=Local"
 	// db为单例
 	if db == nil {
 		var err error

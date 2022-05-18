@@ -7,7 +7,7 @@
 package controller
 
 import (
-	"MyProject/src/service"
+	"dou-xiao-yin/src/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -18,8 +18,8 @@ import (
 */
 type FeedResponse struct {
 	service.Response
-	VideoList []service.Video `json:"video_list,omitempty"`
-	NextTime  int64           `json:"next_time,omitempty"`
+	VideoList []*service.Video `json:"video_list,omitempty"`
+	NextTime  int64            `json:"next_time,omitempty"`
 }
 
 // Feed same demo video list for every request

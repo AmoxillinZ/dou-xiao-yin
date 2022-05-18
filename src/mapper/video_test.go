@@ -1,7 +1,7 @@
 package mapper
 
 import (
-	"MyProject/src/model"
+	"dou-xiao-yin/src/model"
 	"fmt"
 	"reflect"
 	"testing"

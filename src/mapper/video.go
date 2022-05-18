@@ -7,8 +7,8 @@
 package mapper
 
 import (
-	"MyProject/src/config"
-	"MyProject/src/model"
+	"dou-xiao-yin/src/config"
+	"dou-xiao-yin/src/model"
 )
 
 func GetVideoById(id int) *model.Video {
@@ -21,6 +21,7 @@ func GetVideoById(id int) *model.Video {
 func GetVideos() []*model.Video {
 	vs := make([]*model.Video, 0)
 	db := config.GetDefaultDb()
-	db.Limit(10).Find(&vs)
+	//按publish_time倒序返回
+	db.Limit(10).Order("publish_time desc").Find(&vs)
 	return vs
 }
