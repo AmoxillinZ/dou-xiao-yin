@@ -26,26 +26,6 @@ func initRouter(r *gin.Engine) {
 		c.File("./src/public/bear.mp4")
 	})
 
-	// sjh 本地测试的一些静态资源路径
-	apiRouter.GET("/sjh1c/", func(c *gin.Context) {
-		c.File("./src/public/sjh1c.jpg")
-	})
-	apiRouter.GET("/sjh2c/", func(c *gin.Context) {
-		c.File("./src/public/sjh2c.jpg")
-	})
-	apiRouter.GET("/sjh3c/", func(c *gin.Context) {
-		c.File("./src/public/sjh3c.jpg")
-	})
-	apiRouter.GET("/sjh1/", func(c *gin.Context) {
-		c.File("./src/public/sjh1.mp4")
-	})
-	apiRouter.GET("/sjh2/", func(c *gin.Context) {
-		c.File("./src/public/sjh2.mp4")
-	})
-	apiRouter.GET("/sjh3/", func(c *gin.Context) {
-		c.File("./src/public/sjh3.mp4")
-	})
-
 	// basic apis
 	apiRouter.GET("/feed/", controller.Feed)
 
