@@ -3,6 +3,7 @@ package controller
 import (
 	"dou-xiao-yin/src/model"
 	"dou-xiao-yin/src/service"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -18,6 +19,12 @@ type UserLoginResponse struct {
 type UserInfoResponse struct {
 	service.Response
 	User *model.User `json:"user"`
+}
+
+type UserRegisterResponse struct {
+	service.Response
+	UserId int    `json:"user_id,omitempty"`
+	Token  string `json:"token,omitempty"`
 }
 
 // Login 响应用户登录
@@ -54,6 +61,40 @@ func UserInfo(c *gin.Context) {
 		c.JSON(http.StatusOK, UserInfoResponse{
 			Response: service.Response{StatusCode: 0},
 			User:     user,
+		})
+	}
+}
+
+// Register 响应用户注册
+func Register(c *gin.Context) {
+	// 前置检验合法性
+	username := c.Query("username")
+	password := c.Query("password")
+
+	if len(username) > 32 {
+		err := errors.New("用户名最长 32 个字符")
+		c.JSON(http.StatusBadRequest, UserRegisterResponse{
+			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+		})
+	}
+
+	if len(password) > 32 || len(password) < 5 {
+		err := errors.New("密码最短 5 字符，最长 32 个字符")
+		c.JSON(http.StatusBadRequest, UserRegisterResponse{
+			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+		})
+	}
+
+	user, err := service.UserRegister(username, password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, UserRegisterResponse{
+			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+		})
+	} else {
+		c.JSON(http.StatusOK, UserRegisterResponse{
+			Response: service.Response{StatusCode: 0},
+			UserId:   user.Id,
+			Token:    user.Token,
 		})
 	}
 }
