@@ -7,16 +7,14 @@
 package router
 
 import (
+	"dou-xiao-yin/src/config"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	resourcesPath = "./src/public"
-)
-
 // InitResourceRouters : 为视频播放路径和封面路径指定对应资源/*
 func InitResourceRouters(r *gin.Engine) error {
+	resourcesPath := config.GetConf().Resource
 	r.GET("/douyin/resources/video/:user_id/:id", func(c *gin.Context) {
 		user_id := c.Param("user_id")
 		id := c.Param("id")

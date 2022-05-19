@@ -6,3 +6,4 @@ database:
   dbname: dou_xiao_yin
   username: root
   password: nbroot
+resource: "./src/public"

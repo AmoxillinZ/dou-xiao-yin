@@ -14,6 +14,7 @@ import (
 
 type Conf struct {
 	Database Database
+	Resource string
 }
 type Database struct {
 	Dbtype   string

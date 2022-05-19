@@ -47,7 +47,10 @@ func GetVideoList() []*Video {
 	videos_ori := mapper.GetVideos()
 	for _, video_ori := range videos_ori {
 		// author_ori:model.User类型
-		author_ori := mapper.GetUserById(video_ori.AuthorId)
+		author_ori, err := mapper.GetUserById(video_ori.AuthorId)
+		if err != nil {
+			fmt.Println(err)
+		}
 		// model.User ->
 		author := User{
 			Id:            author_ori.Id,
@@ -67,7 +70,6 @@ func GetVideoList() []*Video {
 	}
 	// 处理播放和封面路由
 	parseUrl(videos)
-
 	return videos
 }
 
