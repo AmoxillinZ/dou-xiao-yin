@@ -44,26 +44,26 @@ type User struct {
 func GetVideoList() []*Video {
 	videos := make([]*Video, 0)
 	// videos_ori：model.Video类型
-	videos_ori := mapper.GetVideos()
-	for _, video_ori := range videos_ori {
+	videosOri := mapper.GetVideos()
+	for _, videoOri := range videosOri {
 		// author_ori:model.User类型
-		author_ori, err := mapper.GetUserById(video_ori.AuthorId)
+		authorOri, err := mapper.GetUserById(videoOri.AuthorId)
 		if err != nil {
 			fmt.Println(err)
 		}
 		// model.User ->
 		author := User{
-			Id:            author_ori.Id,
-			Username:      author_ori.Username,
-			FollowCount:   author_ori.FollowerCount,
-			FollowerCount: author_ori.FollowCount,
+			Id:            authorOri.Id,
+			Username:      authorOri.Username,
+			FollowCount:   authorOri.FollowerCount,
+			FollowerCount: authorOri.FollowCount,
 			IsFollow:      false, //待补充
 		}
 		video := Video{
-			Id:            video_ori.Id,
+			Id:            videoOri.Id,
 			Author:        author,
-			FavoriteCount: video_ori.FavoriteCount,
-			CommentCount:  video_ori.CommentCount,
+			FavoriteCount: videoOri.FavoriteCount,
+			CommentCount:  videoOri.CommentCount,
 			IsFavorite:    false, //待补充
 		}
 		videos = append(videos, &video)

@@ -16,15 +16,15 @@ import (
 func InitResourceRouters(r *gin.Engine) error {
 	resourcesPath := config.GetConf().Resource
 	r.GET("/douyin/resources/video/:user_id/:id", func(c *gin.Context) {
-		user_id := c.Param("user_id")
+		userId := c.Param("user_id")
 		id := c.Param("id")
-		videoPath := fmt.Sprintf("%s/videos/%s/%s.mp4", resourcesPath, user_id, id)
+		videoPath := fmt.Sprintf("%s/videos/%s/%s.mp4", resourcesPath, userId, id)
 		c.File(videoPath)
 	})
 	r.GET("/douyin/resources/cover/:user_id/:id", func(c *gin.Context) {
-		user_id := c.Param("user_id")
+		userId := c.Param("user_id")
 		id := c.Param("id")
-		coverPath := fmt.Sprintf("%s/covers/%s/%s.jpg", resourcesPath, user_id, id)
+		coverPath := fmt.Sprintf("%s/covers/%s/%s.jpg", resourcesPath, userId, id)
 		c.File(coverPath)
 	})
 	return nil
