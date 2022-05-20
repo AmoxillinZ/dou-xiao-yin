@@ -14,7 +14,7 @@ import (
 
 type Conf struct {
 	Database Database
-	Resource string
+	Resource Resource
 }
 type Database struct {
 	Dbtype   string
@@ -24,6 +24,11 @@ type Database struct {
 	Dbname   string
 	Username string
 	Password string
+}
+type Resource struct {
+	StaticPath string `yaml:"staticPath"`
+	Ip         string
+	Port       string
 }
 
 func GetConf() Conf {
@@ -38,5 +43,6 @@ func GetConf() Conf {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	fmt.Println("conf.Resource = ", conf.Resource)
 	return conf
 }

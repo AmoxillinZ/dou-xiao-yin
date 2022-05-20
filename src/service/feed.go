@@ -7,6 +7,7 @@
 package service
 
 import (
+	"dou-xiao-yin/src/config"
 	"dou-xiao-yin/src/mapper"
 	"fmt"
 )
@@ -73,15 +74,13 @@ func GetVideoList() []*Video {
 	return videos
 }
 
-const (
-	ip   = "172.20.6.84"
-	port = 8080
-)
-
+/*为video生成视频和封面的静态资源路径*/
 func parseUrl(videos []*Video) {
+	ip := config.GetConf().Resource.Ip
+	port := config.GetConf().Resource.Port
 	for _, video := range videos {
-		videoUrl := fmt.Sprintf("http://%s:%d/douyin/resources/video/%d/%d", ip, port, video.Author.Id, video.Id)
-		coverUrl := fmt.Sprintf("http://%s:%d/douyin/resources/cover/%d/%d", ip, port, video.Author.Id, video.Id)
+		videoUrl := fmt.Sprintf("http://%s:%s/douyin/resources/video/%d/%d", ip, port, video.Author.Id, video.Id)
+		coverUrl := fmt.Sprintf("http://%s:%s/douyin/resources/cover/%d/%d", ip, port, video.Author.Id, video.Id)
 		video.PlayUrl = videoUrl
 		video.CoverUrl = coverUrl
 	}

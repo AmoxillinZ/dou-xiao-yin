@@ -14,7 +14,7 @@ import (
 
 // InitResourceRouters : 为视频播放路径和封面路径指定对应资源/*
 func InitResourceRouters(r *gin.Engine) error {
-	resourcesPath := config.GetConf().Resource
+	resourcesPath := config.GetConf().Resource.StaticPath
 	r.GET("/douyin/resources/video/:user_id/:id", func(c *gin.Context) {
 		userId := c.Param("user_id")
 		id := c.Param("id")

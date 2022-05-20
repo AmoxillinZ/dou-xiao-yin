@@ -1,3 +1,4 @@
+#数据库配置
 database:
   dbtype: mysql
   host: 202.204.100.175
@@ -6,4 +7,9 @@ database:
   dbname: dou_xiao_yin
   username: root
   password: nbroot
-resource: "./src/public"
+#  静态资源路径、请求静态资源的ip和端口
+resource:
+  staticPath: ./src/public
+  #  ip为静态资源所在ip
+  ip: 172.20.6.84
+  port: 8080
