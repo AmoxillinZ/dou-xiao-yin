@@ -71,15 +71,15 @@ func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	if len(username) > 32 {
-		err := errors.New("用户名最长 32 个字符")
+	if len(username) > 32 || len(username) < 1 {
+		err := errors.New("用户名长度不合法")
 		c.JSON(http.StatusBadRequest, UserRegisterResponse{
 			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
 	}
 
 	if len(password) > 32 || len(password) < 5 {
-		err := errors.New("密码最短 5 字符，最长 32 个字符")
+		err := errors.New("密码长度不合法")
 		c.JSON(http.StatusBadRequest, UserRegisterResponse{
 			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
@@ -90,11 +90,12 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, UserRegisterResponse{
 			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
-	} else {
-		c.JSON(http.StatusOK, UserRegisterResponse{
-			Response: service.Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    user.Token,
-		})
 	}
+
+	c.JSON(http.StatusOK, UserRegisterResponse{
+		Response: service.Response{StatusCode: 0},
+		UserId:   user.Id,
+		Token:    user.Token,
+	})
+
 }

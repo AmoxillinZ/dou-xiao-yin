@@ -3,6 +3,7 @@ package service
 import (
 	"dou-xiao-yin/src/mapper"
 	"dou-xiao-yin/src/model"
+	"dou-xiao-yin/src/utils"
 	"errors"
 	"fmt"
 )
@@ -54,15 +55,37 @@ func GetUserInfo(id int, token string) (*model.User, error) {
 }
 
 func UserRegister(username string, password string) (*model.User, error) {
-	// 暂时生成一致 token
-	token := username + password
-
-	user := &model.User{Username: username, Password: password, Token: token}
-
-	err := mapper.AddUser(user)
+	// 注册新用户
+	newUser := &model.User{Username: username, Password: password}
+	err := mapper.AddUser(newUser)
 	if err != nil {
-		fmt.Println(err)
 		return nil, errors.New("无法添加用户")
 	}
-	return user, err
+
+	// 获取用户 id 生成 token
+	user, err := mapper.GetUserByUsername(username)
+	if err != nil {
+		return nil, errors.New("无法根据用户名获取用户信息")
+	}
+
+	id := user.Id
+	token, err := utils.SetToken(id, username, password)
+	if err != nil {
+		fmt.Println(err)
+		return nil, errors.New("生成 token 失败")
+	}
+
+	// 写入 Token
+	err = mapper.UpdateUserToken(user, token)
+	if err != nil {
+		return nil, errors.New("更新用户 Token 失败")
+	}
+
+	// 重新获取用户
+	user, err = mapper.GetUserById(id)
+	if err != nil {
+		return nil, errors.New("无法根据 id 获取用户信息")
+	}
+
+	return user, nil
 }
