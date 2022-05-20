@@ -52,3 +52,17 @@ func GetUserInfo(id int, token string) (*model.User, error) {
 	// 返回数据
 	return user, nil
 }
+
+func UserRegister(username string, password string) (*model.User, error) {
+	// 暂时生成一致 token
+	token := username + password
+
+	user := &model.User{Username: username, Password: password, Token: token}
+
+	err := mapper.AddUser(user)
+	if err != nil {
+		fmt.Println(err)
+		return nil, errors.New("无法添加用户")
+	}
+	return user, err
+}

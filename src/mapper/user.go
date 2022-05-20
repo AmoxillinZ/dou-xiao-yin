@@ -30,3 +30,9 @@ func UpdateUserToken(user *model.User, token string) error {
 	result := db.Model(&user).Update("token", token)
 	return result.Error
 }
+
+func AddUser(user *model.User) error {
+	db := config.GetDefaultDb()
+	result := db.Create(&user)
+	return result.Error
+}
