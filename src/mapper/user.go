@@ -25,6 +25,13 @@ func GetUserByUsername(username string) (*model.User, error) {
 	return user, result.Error
 }
 
+func GetUserByToken(token string) (*model.User, error) {
+	user := &model.User{}
+	db := config.GetDefaultDb()
+	result := db.Where("token = ?", token).Take(&user)
+	return user, result.Error
+}
+
 func UpdateUserToken(user *model.User, token string) error {
 	db := config.GetDefaultDb()
 	result := db.Model(&user).Update("token", token)

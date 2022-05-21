@@ -1,7 +1,37 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"dou-xiao-yin/src/service"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
+
+type PublishListResponse struct {
+	service.Response
+	VideoList []*service.Video `json:"video_list,omitempty"`
+}
 
 func PublishList(c *gin.Context) {
+	// TODO 之后再补充,先写 oss 服务了
+	//token := c.Query("token")
+	//userId, _ := strconv.Atoi(c.Query("user_id"))
+	//
+	////转到发布服务
+	//videoList, err := service.PublishList(userId, token)
+}
 
+func PublishAction(c *gin.Context) {
+	file, err := c.FormFile("data")
+	token := c.Request.Form.Get("token")
+	title := c.Request.Form.Get("title")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, service.Response{StatusCode: 1, StatusMsg: err.Error()})
+	}
+	err = service.PublishVideo(file, token, title)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, service.Response{StatusCode: 1, StatusMsg: err.Error()})
+	}
+	c.JSON(http.StatusOK, service.Response{StatusCode: 0})
 }

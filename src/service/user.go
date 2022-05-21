@@ -12,7 +12,6 @@ func UserLogin(username string, password string) (*model.User, error) {
 	// 根据用户名称查询用户
 	user, err := mapper.GetUserByUsername(username)
 	if err != nil {
-		fmt.Println(err)
 		return nil, errors.New("没有查询到用户")
 	}
 
@@ -22,7 +21,10 @@ func UserLogin(username string, password string) (*model.User, error) {
 	}
 
 	//为该用户生成 Token, 这里回头使用 jwt? 来生成 token
-	token := username + password
+	token, err := utils.SetToken(user.Id, user.Username, user.Password)
+	if err != nil {
+		return nil, errors.New("生成 token 失败")
+	}
 
 	// 写入 Token
 	err = mapper.UpdateUserToken(user, token)
