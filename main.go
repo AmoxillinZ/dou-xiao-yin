@@ -16,7 +16,7 @@ func main() {
 	r := gin.Default()
 
 	// 初始化配置
-	config.InitConf()
+	config.InitConf("./src/config/conf.yaml")
 	// 初始化接口router
 	router.InitRouter(r)
 

@@ -43,9 +43,9 @@ type Oss struct {
 var conf Conf
 
 // InitConf : 初始化配置，从conf.yaml加载配置到conf中
-func InitConf() {
+func InitConf(configPath string) {
 	// 加载文件
-	yamlFile, err := ioutil.ReadFile("./src/config/conf.yaml")
+	yamlFile, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
