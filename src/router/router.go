@@ -36,5 +36,6 @@ func InitRouter(r *gin.Engine) {
 	publish := apiRouter.Group("/publish")
 	{
 		publish.GET("/list/", controller.PublishList)
+		publish.POST("/action/", controller.PublishAction)
 	}
 }

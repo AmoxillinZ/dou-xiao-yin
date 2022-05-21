@@ -15,6 +15,7 @@ import (
 type Conf struct {
 	Database Database
 	Resource Resource
+	Oss      Oss
 }
 type Database struct {
 	Dbtype   string
@@ -29,6 +30,13 @@ type Resource struct {
 	StaticPath string `yaml:"staticPath"`
 	Ip         string
 	Port       string
+}
+
+type Oss struct {
+	Endpoint        string `yaml:"endpoint"`
+	AccessKeyId     string `yaml:"accessKeyId"`
+	AccessKeySecret string `yaml:"accessKeySecret"`
+	BucketName      string `yaml:"bucketName"`
 }
 
 func GetConf() Conf {

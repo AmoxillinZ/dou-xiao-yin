@@ -11,5 +11,11 @@ database:
 resource:
   staticPath: ./src/public
   #  ip为静态资源所在ip
-  ip: 172.20.6.84
-  port: 8080
+  ip: dou-xiao-yin.oss-cn-beijing.aliyuncs.com
+  port: 80
+# 阿里云 oss 的配置
+oss:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  accessKeyId: LTAI5tSiPxdSeZTqyrVg35mW
+  accessKeySecret: fisOWkIhmWVmuFHvS7KdQSJ6pwsiOo
+  bucketName: dou-xiao-yin

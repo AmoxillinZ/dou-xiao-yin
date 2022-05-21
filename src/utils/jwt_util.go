@@ -10,7 +10,7 @@ import (
 // 私钥
 var jwtKey = []byte("yi-fan-feng-shun-er-long-xi-zhu-san-yang-kai-tai-si-wu-liu-qi-ba-jiu-shi")
 
-// jwt.StandardClaims 提供到期时间等字段
+// Claims jwt.StandardClaims 提供到期时间等字段
 type Claims struct {
 	Id       int    `json:"id,omitempty"`
 	Username string `json:"name,omitempty"`
@@ -18,7 +18,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// 颁发 token
+// SetToken 颁发 token
 func SetToken(id int, username string, password string) (string, error) {
 	// 设置过期时间（七天一登陆？是否添加 token 刷新？）
 	expireTime := time.Now().Add(7 * 24 * time.Hour)
@@ -48,7 +48,7 @@ func SetToken(id int, username string, password string) (string, error) {
 	return tokenString, nil
 }
 
-// 解析 token，返回用户信息，按需使用
+// ParseToken 解析 token，返回用户信息，按需使用
 func ParseToken(tokenString string) (id int, username string, password string, e error) {
 
 	if tokenString == "" {

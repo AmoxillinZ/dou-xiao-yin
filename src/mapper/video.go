@@ -25,3 +25,16 @@ func GetVideos() []*model.Video {
 	db.Limit(10).Order("publish_time desc").Find(&vs)
 	return vs
 }
+
+func GetVideosByAuthorId(authorId int) ([]*model.Video, error) {
+	videos := make([]*model.Video, 0)
+	db := config.GetDefaultDb()
+	result := db.Where("author_id = ?", authorId).Find(&videos)
+	return videos, result.Error
+}
+
+func AddVideo(video *model.Video) error {
+	db := config.GetDefaultDb()
+	result := db.Create(&video)
+	return result.Error
+}
