@@ -9,6 +9,7 @@ package mapper
 import (
 	"dou-xiao-yin/src/config"
 	"dou-xiao-yin/src/model"
+	"errors"
 )
 
 func GetUserById(id int) (*model.User, error) {
@@ -30,6 +31,18 @@ func GetUserByToken(token string) (*model.User, error) {
 	db := config.GetDefaultDb()
 	result := db.Where("token = ?", token).Take(&user)
 	return user, result.Error
+}
+
+// GetUserIdByToken : 根据token查询userId。
+//Gorm好像不支持直接用基本类型接收查询结果，所以还是用User接收，但只查询id
+func GetUserIdByToken(token string) (*model.User, error) {
+	db := config.GetDefaultDb()
+	userId := &model.User{}
+	db.Select("id").Where("token = ?", token).Limit(1).Find(&userId)
+	if userId == nil {
+		return nil, errors.New("未找到token")
+	}
+	return userId, nil
 }
 
 func UpdateUserToken(user *model.User, token string) error {

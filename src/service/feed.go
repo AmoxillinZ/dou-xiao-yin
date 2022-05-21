@@ -42,7 +42,8 @@ type User struct {
 	IsFollow      bool   `json:"is_follow,omitempty"`
 }
 
-func GetVideoList() []*Video {
+func GetVideoList(userId int) []*Video {
+	//传入userId用于判断当前用户是否给各个视频点了赞
 	videos := make([]*Video, 0)
 	// videos_ori：model.Video类型
 	videosOri := mapper.GetVideos()
@@ -65,7 +66,7 @@ func GetVideoList() []*Video {
 			Author:        author,
 			FavoriteCount: videoOri.FavoriteCount,
 			CommentCount:  videoOri.CommentCount,
-			IsFavorite:    false, //待补充
+			IsFavorite:    mapper.IsFavorite(videoOri.Id, userId),
 		}
 		videos = append(videos, &video)
 	}
