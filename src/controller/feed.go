@@ -26,18 +26,14 @@ type FeedResponse struct {
 // Feed same demo video list for every request
 func Feed(c *gin.Context) {
 	token := c.Query("token")
+	//lastTime := c.Query("last_time")
+	// TODO 需要完善last_time参数
 	// 根据token查找用户id (直接调用了mapper层，可能不太规范)
-	userWithId, err := mapper.GetUserIdByToken(token)
-	userId := userWithId.Id
-	if err != nil {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
-		})
-	} else {
-		c.JSON(http.StatusOK, FeedResponse{
-			Response:  service.Response{StatusCode: 0},
-			VideoList: service.GetVideoList(userId),
-			NextTime:  time.Now().Unix(),
-		})
-	}
+	userId := mapper.GetUserIdByToken(token)
+	c.JSON(http.StatusOK, FeedResponse{
+		Response:  service.Response{StatusCode: 0},
+		VideoList: service.GetVideoList(userId),
+		// TODO nextTime:的值需要完善
+		NextTime: time.Now().Unix(),
+	})
 }

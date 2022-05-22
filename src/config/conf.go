@@ -52,7 +52,7 @@ func InitConf(configPath string) {
 	// 将读取的yaml文件解析为相应的struct
 	err = yaml.Unmarshal(yamlFile, &conf)
 	if err != nil {
-		fmt.Println(err.Error())
+		panic("db连接异常")
 	}
 }
 
