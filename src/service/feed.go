@@ -12,37 +12,8 @@ import (
 	"fmt"
 )
 
-type Response struct {
-	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,omitempty"`
-}
-
-type Video struct {
-	Id            int    `json:"id,omitempty"`
-	Author        User   `json:"author"`
-	PlayUrl       string `json:"play_url" json:"play_url,omitempty"`
-	CoverUrl      string `json:"cover_url,omitempty"`
-	FavoriteCount int    `json:"favorite_count,omitempty"`
-	CommentCount  int    `json:"comment_count,omitempty"`
-	IsFavorite    bool   `json:"is_favorite,omitempty"`
-}
-
-type Comment struct {
-	Id         int    `json:"id,omitempty"`
-	User       User   `json:"user"`
-	Content    string `json:"content,omitempty"`
-	CreateDate string `json:"create_date,omitempty"`
-}
-
-type User struct {
-	Id            int    `json:"id,omitempty"`
-	Username      string `json:"username,omitempty"`
-	FollowCount   int    `json:"follow_count,omitempty"`
-	FollowerCount int    `json:"follower_count,omitempty"`
-	IsFollow      bool   `json:"is_follow,omitempty"`
-}
-
-func GetVideoList() []*Video {
+func GetVideoList(userId int) []*Video {
+	//传入userId用于判断当前用户是否给各个视频点了赞
 	videos := make([]*Video, 0)
 	// videos_ori：model.Video类型
 	videosOri := mapper.GetVideos()
@@ -65,7 +36,7 @@ func GetVideoList() []*Video {
 			Author:        author,
 			FavoriteCount: videoOri.FavoriteCount,
 			CommentCount:  videoOri.CommentCount,
-			IsFavorite:    false, //待补充
+			IsFavorite:    mapper.IsFavorite(videoOri.Id, userId),
 		}
 		videos = append(videos, &video)
 	}

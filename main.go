@@ -7,6 +7,7 @@
 package main
 
 import (
+	"dou-xiao-yin/src/config"
 	"dou-xiao-yin/src/router"
 	"github.com/gin-gonic/gin"
 )
@@ -14,8 +15,8 @@ import (
 func main() {
 	r := gin.Default()
 
-	// 初始化静态资源router
-	router.InitResourceRouters(r)
+	// 初始化配置
+	config.InitConf("./src/config/conf.yaml")
 	// 初始化接口router
 	router.InitRouter(r)
 

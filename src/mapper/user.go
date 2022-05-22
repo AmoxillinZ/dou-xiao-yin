@@ -32,6 +32,15 @@ func GetUserByToken(token string) (*model.User, error) {
 	return user, result.Error
 }
 
+// GetUserIdByToken : 根据token查询userId。
+//Gorm好像不支持直接用基本类型接收查询结果，所以还是用User接收，但只查询id
+func GetUserIdByToken(token string) int {
+	db := config.GetDefaultDb()
+	userWithId := &model.User{}
+	db.Select("id").Where("token = ?", token).Limit(1).Take(&userWithId)
+	return userWithId.Id
+}
+
 func UpdateUserToken(user *model.User, token string) error {
 	db := config.GetDefaultDb()
 	result := db.Model(&user).Update("token", token)

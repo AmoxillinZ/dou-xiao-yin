@@ -39,18 +39,23 @@ type Oss struct {
 	BucketName      string `yaml:"bucketName"`
 }
 
-func GetConf() Conf {
-	var conf Conf
+// conf: 配置结构体，InitConf中初始化
+var conf Conf
+
+// InitConf : 初始化配置，从conf.yaml加载配置到conf中
+func InitConf(configPath string) {
 	// 加载文件
-	yamlFile, err := ioutil.ReadFile("./src/config/conf.yaml")
+	yamlFile, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	// 将读取的yaml文件解析为响应的 struct
+	// 将读取的yaml文件解析为相应的struct
 	err = yaml.Unmarshal(yamlFile, &conf)
 	if err != nil {
-		fmt.Println(err.Error())
+		panic("db连接异常")
 	}
-	fmt.Println("conf.Resource = ", conf.Resource)
+}
+
+func GetConf() Conf {
 	return conf
 }

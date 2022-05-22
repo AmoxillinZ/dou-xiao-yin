@@ -9,6 +9,7 @@ package mapper
 import (
 	"dou-xiao-yin/src/config"
 	"dou-xiao-yin/src/model"
+	"gorm.io/gorm"
 )
 
 func GetVideoById(id int) *model.Video {
@@ -21,8 +22,9 @@ func GetVideoById(id int) *model.Video {
 func GetVideos() []*model.Video {
 	vs := make([]*model.Video, 0)
 	db := config.GetDefaultDb()
-	//按publish_time倒序返回
-	db.Limit(10).Order("publish_time desc").Find(&vs)
+	//按publish_time倒序返回，
+	// TODO 限制条数？
+	db.Limit(30).Order("publish_time desc").Find(&vs)
 	return vs
 }
 
@@ -36,5 +38,21 @@ func GetVideosByAuthorId(authorId int) ([]*model.Video, error) {
 func AddVideo(video *model.Video) error {
 	db := config.GetDefaultDb()
 	result := db.Create(&video)
+	return result.Error
+}
+
+// IncreaseFavoriteCount : 相应video的点赞数+1
+func IncreaseFavoriteCount(videoId int) error {
+	video := model.Video{Id: videoId}
+	db := config.GetDefaultDb()
+	result := db.Model(&video).UpdateColumn("favorite_count", gorm.Expr("favorite_count + ?", 1))
+	return result.Error
+}
+
+// DecreaseFavoriteCount : 相应video的点赞数-1
+func DecreaseFavoriteCount(videoId int) error {
+	video := model.Video{Id: videoId}
+	db := config.GetDefaultDb()
+	result := db.Model(&video).UpdateColumn("favorite_count", gorm.Expr("favorite_count - ?", 1))
 	return result.Error
 }

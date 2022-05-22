@@ -30,6 +30,7 @@ func InitRouter(r *gin.Engine) {
 	favorite := apiRouter.Group("/favorite")
 	{
 		favorite.GET("/list/", controller.FavoriteList)
+		favorite.POST("/action/", controller.FavoriteAction)
 	}
 
 	// 发布路由组
