@@ -33,7 +33,7 @@ func GetUserByToken(token string) (*model.User, error) {
 }
 
 // GetUserIdByToken : 根据token查询userId。
-//Gorm好像不支持直接用基本类型接收查询结果，所以还是用User接收，但只查询id
+// 可以通过jwt_util直接获取,不需要查数据库
 func GetUserIdByToken(token string) int {
 	db := config.GetDefaultDb()
 	userWithId := &model.User{}

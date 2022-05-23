@@ -7,8 +7,8 @@
 package controller
 
 import (
-	"dou-xiao-yin/src/mapper"
 	"dou-xiao-yin/src/service"
+	"dou-xiao-yin/src/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -28,8 +28,8 @@ func Feed(c *gin.Context) {
 	token := c.Query("token")
 	//lastTime := c.Query("last_time")
 	// TODO 需要完善last_time参数
-	// 根据token查找用户id (直接调用了mapper层，可能不太规范)
-	userId := mapper.GetUserIdByToken(token)
+	// 根据token查找用户id
+	userId, _, _, _ := utils.ParseToken(token)
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  service.Response{StatusCode: 0},
 		VideoList: service.GetVideoList(userId),
