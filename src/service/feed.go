@@ -55,5 +55,4 @@ func parseUrl(videos []*Video) {
 		video.PlayUrl = videoUrl
 		video.CoverUrl = coverUrl
 	}
-
 }
