@@ -9,21 +9,37 @@ package service
 import (
 	"dou-xiao-yin/src/config"
 	"dou-xiao-yin/src/mapper"
+	"dou-xiao-yin/src/model"
 	"fmt"
+	"strconv"
+	"time"
 )
 
-func GetVideoList(userId int) []*Video {
-	//传入userId用于判断当前用户是否给各个视频点了赞
+// GetVideoList ：传入userId用于判断当前用户是否给各个视频点了赞
+func GetVideoList(userId int, latestTime string) ([]*Video, int64) {
 	videos := make([]*Video, 0)
-	// videos_ori：model.Video类型
-	videosOri := mapper.GetVideos()
+	videosOri := make([]*model.Video, 0)
+	var nextTime int64
+	// latest_time是否为空的两种情况，请求视频列表
+	fmt.Println("^^latestTime = ", latestTime, "len(latestTime) = ", len(latestTime))
+	if len(latestTime) == 0 {
+		videosOri = mapper.GetVideos()
+	} else { // 请求携带latest_time，查询latest_time之前的视频
+		lt, _ := strconv.Atoi(latestTime)
+		latestTimeUnix := int64(lt)
+		videosOri = mapper.GetVideosByTime(latestTimeUnix)
+	}
+	if len(videosOri) <= 0 {
+		return nil, time.Now().Unix()
+	}
+	//取本次返回的视频列表的最后一个的发布时间，并转换为时间戳赋值给nextTime
+	nextTime = videosOri[len(videosOri)-1].PublishTime.UnixMilli()
 	for _, videoOri := range videosOri {
-		// author_ori:model.User类型
 		authorOri, err := mapper.GetUserById(videoOri.AuthorId)
 		if err != nil {
 			fmt.Println(err)
 		}
-		// model.User ->
+		// model.User -> common.User
 		author := User{
 			Id:            authorOri.Id,
 			Username:      authorOri.Username,
@@ -37,12 +53,13 @@ func GetVideoList(userId int) []*Video {
 			FavoriteCount: videoOri.FavoriteCount,
 			CommentCount:  videoOri.CommentCount,
 			IsFavorite:    mapper.IsFavorite(videoOri.Id, userId),
+			Title:         videoOri.Title,
 		}
 		videos = append(videos, &video)
 	}
 	// 处理播放和封面路由
 	parseUrl(videos)
-	return videos
+	return videos, nextTime
 }
 
 /*为video生成视频和封面的静态资源路径*/

@@ -11,7 +11,6 @@ import (
 	"dou-xiao-yin/src/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"time"
 )
 
 /*
@@ -26,14 +25,13 @@ type FeedResponse struct {
 // Feed same demo video list for every request
 func Feed(c *gin.Context) {
 	token := c.Query("token")
-	//lastTime := c.Query("last_time")
-	// TODO 需要完善last_time参数
+	latestTime := c.Query("latest_time")
 	// 根据token查找用户id
 	userId, _, _, _ := utils.ParseToken(token)
+	videoList, nextTime := service.GetVideoList(userId, latestTime)
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  service.Response{StatusCode: 0},
-		VideoList: service.GetVideoList(userId),
-		// TODO nextTime:的值需要完善
-		NextTime: time.Now().Unix(),
+		VideoList: videoList,
+		NextTime:  nextTime,
 	})
 }

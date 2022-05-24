@@ -19,12 +19,21 @@ func GetVideoById(id int) *model.Video {
 	return vs
 }
 
+// GetVideos : latest_time缺省，返回最新视频
 func GetVideos() []*model.Video {
 	vs := make([]*model.Video, 0)
 	db := config.GetDefaultDb()
-	//按publish_time倒序返回，
-	// TODO 限制条数？
+	//按publish_time倒序返回
 	db.Limit(30).Order("publish_time desc").Find(&vs)
+	return vs
+}
+
+// GetVideosByTime : 限制投稿时间
+func GetVideosByTime(latestTime int64) []*model.Video {
+	vs := make([]*model.Video, 0)
+	db := config.GetDefaultDb()
+	//查找latest_time之前的视频，按publish_time倒序返回
+	db.Where("publish_time < FROM_UNIXTIME(?)", latestTime/1000).Limit(30).Order("publish_time desc").Find(&vs)
 	return vs
 }
 
