@@ -48,12 +48,43 @@ func SetToken(id int, username string, password string) (string, error) {
 	return tokenString, nil
 }
 
-// ParseToken 解析 token，返回用户信息，按需使用
+// ParseToken 解析获得 token 中的 (userId, username, password)，内含鉴权，可直接使用
 func ParseToken(tokenString string) (id int, username string, password string, e error) {
 
+	claims, err := tokenString2claims(tokenString)
+	if err != nil {
+		return 0, "", "", err
+	}
+
+	return claims.Id, claims.Username, claims.Password, nil
+}
+
+// GetIdFromToken 解析获得 token 中的 userId，内含鉴权，可直接使用
+func GetIdFromToken(tokenString string) (id int, e error) {
+
+	claims, err := tokenString2claims(tokenString)
+	if err != nil {
+		return 0, err
+	}
+
+	return claims.Id, nil
+}
+
+// AuthenticateToken 实现 token 鉴权，有效返回 nil，否则返回 error 信息
+func AuthenticateToken(tokenString string) error {
+
+	_, err := tokenString2claims(tokenString)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// 实现 token 解析与鉴权，仅用于 jwt_util 文件内部
+func tokenString2claims(tokenString string) (*Claims, error) {
+
 	if tokenString == "" {
-		fmt.Println("token 为空")
-		return 0, "", "", errors.New("用户权限不足")
+		return nil, errors.New("用户权限不足，token 为空。")
 	}
 
 	claims := &Claims{}
@@ -62,9 +93,8 @@ func ParseToken(tokenString string) (id int, username string, password string, e
 	})
 
 	if err != nil || !token.Valid {
-		fmt.Println("token 无法解析或 token 已过期")
-		return 0, "", "", errors.New("用户权限不足")
+		return nil, errors.New("用户权限不足，token 无法解析或 token 已过期。")
 	}
 
-	return claims.Id, claims.Username, claims.Password, nil
+	return claims, nil
 }
