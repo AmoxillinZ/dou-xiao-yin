@@ -6,25 +6,13 @@
 
 package service
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestTokenVerify(t *testing.T) {
-	type args struct {
-		userId int
-		token  string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := TokenVerify(tt.args.userId, tt.args.token); (err != nil) != tt.wantErr {
-				t.Errorf("TokenVerify() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwibmFtZSI6InpoaCIsInBhc3N3b3JkIjoiMjMzMzMzIiwiZXhwIjoxNjU0MTYxNTk5LCJpYXQiOjE2NTM1NTY3OTksImlzcyI6ImRvdS14aWFvLXlpbi1iYWNrZW5kIiwic3ViIjoidXNlciB0b2tlbiJ9.aUbGxzQ2uzWmhIoA13AEcp-7DAULK48YEoLKX0ksAY4"
+	err := TokenVerify(0, token)
+	fmt.Println(err)
 }

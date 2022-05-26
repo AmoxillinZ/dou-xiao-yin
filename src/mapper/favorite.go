@@ -9,7 +9,6 @@ package mapper
 import (
 	"dou-xiao-yin/src/config"
 	"dou-xiao-yin/src/model"
-	"fmt"
 )
 
 // IsFavorite 判断某个用户是否给某个视频点赞了
@@ -34,12 +33,11 @@ func FavoriteAction(videoId int, userId int) error {
 	favorite := &model.Favorite{VideoId: videoId, UserId: userId}
 	db := config.GetDefaultDb()
 	result := db.Create(&favorite)
-	fmt.Println("result = ", result)
 	return result.Error
 }
 
-// DisFavoriteAction : 取消点赞操作，在点赞表中删除相应记录 */
-func DisFavoriteAction(videoId int, userId int) error {
+// UnFavoriteAction : 取消点赞操作，在点赞表中删除相应记录 */
+func UnFavoriteAction(videoId int, userId int) error {
 	db := config.GetDefaultDb()
 	result := db.Where("video_id = ? and user_id = ?", videoId, userId).Delete(model.Favorite{})
 	return result.Error

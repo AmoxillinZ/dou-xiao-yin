@@ -6,46 +6,21 @@
 
 package mapper
 
-import "testing"
+import (
+	"dou-xiao-yin/src/config"
+	"fmt"
+	"testing"
+)
 
 func TestAddToRelation(t *testing.T) {
-	type args struct {
-		userId   int
-		toUserId int
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := AddToRelation(tt.args.userId, tt.args.toUserId); (err != nil) != tt.wantErr {
-				t.Errorf("AddToRelation() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	err := AddToRelation(2, 1)
+	fmt.Println(err)
 }
 
 func TestDeleteFromRelation(t *testing.T) {
-	type args struct {
-		userId   int
-		toUserId int
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := DeleteFromRelation(tt.args.userId, tt.args.toUserId); (err != nil) != tt.wantErr {
-				t.Errorf("DeleteFromRelation() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	DeleteFromRelation(2, 1)
 }

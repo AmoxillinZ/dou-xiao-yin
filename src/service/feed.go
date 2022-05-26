@@ -21,7 +21,6 @@ func GetVideoList(userId int, latestTime string) ([]*Video, int64) {
 	videosOri := make([]*model.Video, 0)
 	var nextTime int64
 	// latest_time是否为空的两种情况，请求视频列表
-	fmt.Println("^^latestTime = ", latestTime, "len(latestTime) = ", len(latestTime))
 	if len(latestTime) == 0 {
 		videosOri = mapper.GetVideos()
 	} else { // 请求携带latest_time，查询latest_time之前的视频

@@ -6,68 +6,15 @@
 
 package service
 
-import "testing"
-
-func TestFollowAction(t *testing.T) {
-	type args struct {
-		userId   int
-		toUserId int
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := FollowAction(tt.args.userId, tt.args.toUserId); (err != nil) != tt.wantErr {
-				t.Errorf("FollowAction() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
+import (
+	"dou-xiao-yin/src/config"
+	"fmt"
+	"testing"
+)
 
 func TestRelationAction(t *testing.T) {
-	type args struct {
-		userId     int
-		toUserId   int
-		actionType int
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := RelationAction(tt.args.userId, tt.args.toUserId, tt.args.actionType); (err != nil) != tt.wantErr {
-				t.Errorf("RelationAction() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
-func TestUnFollowAction(t *testing.T) {
-	type args struct {
-		userId   int
-		toUserId int
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := UnFollowAction(tt.args.userId, tt.args.toUserId); (err != nil) != tt.wantErr {
-				t.Errorf("UnFollowAction() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	err := RelationAction(6, 1, 2)
+	fmt.Println(err)
 }

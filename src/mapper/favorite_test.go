@@ -22,6 +22,6 @@ func Test_isFavorite(t *testing.T) {
 func TestFavoriteAction(t *testing.T) {
 	config.InitConf("../config/conf.yaml")
 	config.InitDefaultDbEngine()
-	DisFavoriteAction(1, 2)
+	UnFavoriteAction(1, 2)
 
 }
