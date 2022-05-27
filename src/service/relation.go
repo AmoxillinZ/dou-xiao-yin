@@ -16,7 +16,8 @@ func RelationAction(userId int, toUserId int, actionType int) error {
 		return errors.New("不能关注自己")
 	}
 	if actionType == 1 {
-		return FollowAction(userId, toUserId)
+		err := FollowAction(userId, toUserId)
+		return err
 	} else if actionType == 2 {
 		return UnFollowAction(userId, toUserId)
 	} else {
@@ -24,37 +25,15 @@ func RelationAction(userId int, toUserId int, actionType int) error {
 	}
 }
 
-// FollowAction TODO：relation添加记录、user的关注数+1、toUser的粉丝数+1，这三个操作是一个原子操作，封装事务？
 // FollowAction : 关注操作
 func FollowAction(userId int, toUserId int) error {
-	// relation表中新增记录
-	if err := mapper.AddToRelation(userId, toUserId); err != nil {
-		return err
+	if mapper.IsFollowed(userId, toUserId) {
+		return errors.New("已经关注过")
 	}
-	// toUserId对应的用户粉丝总数(follower_count)加一
-	if err := mapper.IncreaseFollowerCount(toUserId); err != nil {
-		return err
-	}
-	// userId对应的用户关注总数(follow_count)加一
-	if err := mapper.IncreaseFollowCount(userId); err != nil {
-		return err
-	}
-	return nil
+	return mapper.FollowAction(userId, toUserId)
 }
 
 // UnFollowAction : 取关操作
 func UnFollowAction(userId int, toUserId int) error {
-	// relation表中删除记录
-	if err := mapper.DeleteFromRelation(userId, toUserId); err != nil {
-		return err
-	}
-	// toUserId对应的用户粉丝总数(follower_count)减一
-	if err := mapper.DecreaseFollowerCount(toUserId); err != nil {
-		return err
-	}
-	// userId对应的用户关注总数(follow_count)减一
-	if err := mapper.DecreaseFollowCount(userId); err != nil {
-		return err
-	}
-	return nil
+	return mapper.UnFollowAction(userId, toUserId)
 }
