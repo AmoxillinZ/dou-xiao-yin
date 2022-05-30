@@ -8,6 +8,7 @@ package service
 
 import (
 	"dou-xiao-yin/src/config"
+	"dou-xiao-yin/src/json_model"
 	"dou-xiao-yin/src/mapper"
 	"dou-xiao-yin/src/model"
 	"fmt"
@@ -16,8 +17,8 @@ import (
 )
 
 // GetVideoList ：传入userId用于判断当前用户是否给各个视频点了赞
-func GetVideoList(userId int, latestTime string) ([]*Video, int64) {
-	videos := make([]*Video, 0)
+func GetVideoList(userId int, latestTime string) ([]*json_model.Video, int64) {
+	videos := make([]*json_model.Video, 0)
 	videosOri := make([]*model.Video, 0)
 	var nextTime int64
 	// latest_time是否为空的两种情况，请求视频列表
@@ -38,15 +39,15 @@ func GetVideoList(userId int, latestTime string) ([]*Video, int64) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		// model.User -> common.User
-		author := User{
+		// model.User -> json_model.User
+		author := json_model.User{
 			Id:            authorOri.Id,
 			Username:      authorOri.Username,
-			FollowCount:   authorOri.FollowerCount,
-			FollowerCount: authorOri.FollowCount,
+			FollowCount:   authorOri.FollowCount,
+			FollowerCount: authorOri.FollowerCount,
 			IsFollow:      false, //待补充
 		}
-		video := Video{
+		video := json_model.Video{
 			Id:            videoOri.Id,
 			Author:        author,
 			FavoriteCount: videoOri.FavoriteCount,
@@ -62,7 +63,7 @@ func GetVideoList(userId int, latestTime string) ([]*Video, int64) {
 }
 
 /*为video生成视频和封面的静态资源路径*/
-func parseUrl(videos []*Video) {
+func parseUrl(videos []*json_model.Video) {
 	ip := config.GetConf().Resource.Ip
 	port := config.GetConf().Resource.Port
 	for _, video := range videos {

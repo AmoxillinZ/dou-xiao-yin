@@ -8,6 +8,7 @@ package mapper
 
 import (
 	"dou-xiao-yin/src/config"
+	"dou-xiao-yin/src/json_model"
 	"dou-xiao-yin/src/model"
 	"gorm.io/gorm"
 )
@@ -87,4 +88,26 @@ func DeleteFromRelation(userId int, toUserId int) error {
 	db := config.GetDefaultDb()
 	result := db.Where("user_id = ? and to_user_id = ?", userId, toUserId).Delete(model.Relation{})
 	return result.Error
+}
+
+// FollowList : 某个用户的关注列表
+func FollowList(userId int) []*json_model.User {
+	fl := make([]*json_model.User, 0)
+	db := config.GetDefaultDb()
+	db.Model(&model.Relation{}).Select("to_user_id id, username, follow_count, follower_count").
+		Joins("inner join `user` on `user`.id = relation.to_user_id").
+		Where("relation.user_id = ?", userId).
+		Find(&fl)
+	return fl
+}
+
+// FollowerList : 某个用户的粉丝列表
+func FollowerList(userId int) []*json_model.User {
+	fl := make([]*json_model.User, 0)
+	db := config.GetDefaultDb()
+	db.Model(&model.Relation{}).Select("user_id id, username, follow_count, follower_count").
+		Joins("inner join `user` on `user`.id = relation.user_id").
+		Where("relation.to_user_id = ?", userId).
+		Find(&fl)
+	return fl
 }

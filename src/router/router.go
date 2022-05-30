@@ -44,5 +44,7 @@ func InitRouter(r *gin.Engine) {
 	relation := apiRouter.Group("/relation")
 	{
 		relation.POST("/action/", controller.RelationAction)
+		relation.GET("/follow/list/", controller.FollowList)
+		relation.GET("/follower/list", controller.FollowerList)
 	}
 }

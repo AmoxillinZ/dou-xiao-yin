@@ -9,7 +9,7 @@ import (
 	"mime/multipart"
 )
 
-func PublishList(userId int, token string) ([]*Video, error) {
+func PublishList(userId int, token string) ([]*model.Video, error) {
 	// 用户权限的验证
 	err := TokenVerify(userId, token)
 	if err != nil {

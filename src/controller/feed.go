@@ -7,6 +7,7 @@
 package controller
 
 import (
+	"dou-xiao-yin/src/json_model"
 	"dou-xiao-yin/src/service"
 	"dou-xiao-yin/src/utils"
 	"github.com/gin-gonic/gin"
@@ -17,9 +18,9 @@ import (
 	处理/douyin/feed/接口
 */
 type FeedResponse struct {
-	service.Response
-	VideoList []*service.Video `json:"video_list,omitempty"`
-	NextTime  int64            `json:"next_time,omitempty"`
+	json_model.Response
+	VideoList []*json_model.Video `json:"video_list,omitempty"`
+	NextTime  int64               `json:"next_time,omitempty"`
 }
 
 // Feed same demo video list for every request
@@ -30,7 +31,7 @@ func Feed(c *gin.Context) {
 	userId, _, _, _ := utils.ParseToken(token)
 	videoList, nextTime := service.GetVideoList(userId, latestTime)
 	c.JSON(http.StatusOK, FeedResponse{
-		Response:  service.Response{StatusCode: 0},
+		Response:  json_model.Response{StatusCode: 0},
 		VideoList: videoList,
 		NextTime:  nextTime,
 	})

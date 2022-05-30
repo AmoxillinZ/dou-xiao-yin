@@ -24,3 +24,21 @@ func TestDeleteFromRelation(t *testing.T) {
 	config.InitDefaultDbEngine()
 	DeleteFromRelation(2, 1)
 }
+
+func TestFollowList(t *testing.T) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	ans := FollowList(6)
+	for _, value := range ans {
+		fmt.Println(value)
+	}
+}
+
+func TestFollowerList(t *testing.T) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	ans := FollowerList(6)
+	for _, value := range ans {
+		fmt.Println(value)
+	}
+}

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"dou-xiao-yin/src/json_model"
 	"dou-xiao-yin/src/model"
 	"dou-xiao-yin/src/service"
 	"errors"
@@ -11,18 +12,18 @@ import (
 
 // UserLoginResponse 用户登录响应体
 type UserLoginResponse struct {
-	service.Response
+	json_model.Response
 	UserId int    `json:"user_id,omitempty"`
 	Token  string `json:"token,omitempty"`
 }
 
 type UserInfoResponse struct {
-	service.Response
+	json_model.Response
 	User *model.User `json:"user"`
 }
 
 type UserRegisterResponse struct {
-	service.Response
+	json_model.Response
 	UserId int    `json:"user_id,omitempty"`
 	Token  string `json:"token,omitempty"`
 }
@@ -35,12 +36,12 @@ func Login(c *gin.Context) {
 	user, err := service.UserLogin(username, password)
 	if err != nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
 	} else {
 		// 返回数据
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: service.Response{StatusCode: 0},
+			Response: json_model.Response{StatusCode: 0},
 			UserId:   user.Id,
 			Token:    user.Token,
 		})
@@ -55,11 +56,11 @@ func UserInfo(c *gin.Context) {
 	user, err := service.GetUserInfo(id, token)
 	if err != nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
 	} else {
 		c.JSON(http.StatusOK, UserInfoResponse{
-			Response: service.Response{StatusCode: 0},
+			Response: json_model.Response{StatusCode: 0},
 			User:     user,
 		})
 	}
@@ -74,26 +75,26 @@ func Register(c *gin.Context) {
 	if len(username) > 32 || len(username) < 1 {
 		err := errors.New("用户名长度不合法")
 		c.JSON(http.StatusBadRequest, UserRegisterResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
 	}
 
 	if len(password) > 32 || len(password) < 5 {
 		err := errors.New("密码长度不合法")
 		c.JSON(http.StatusBadRequest, UserRegisterResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
 	}
 
 	user, err := service.UserRegister(username, password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, UserRegisterResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
 	}
 
 	c.JSON(http.StatusOK, UserRegisterResponse{
-		Response: service.Response{StatusCode: 0},
+		Response: json_model.Response{StatusCode: 0},
 		UserId:   user.Id,
 		Token:    user.Token,
 	})
