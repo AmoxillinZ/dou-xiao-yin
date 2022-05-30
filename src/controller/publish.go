@@ -2,7 +2,6 @@ package controller
 
 import (
 	"dou-xiao-yin/src/json_model"
-	"dou-xiao-yin/src/model"
 	"dou-xiao-yin/src/service"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -12,7 +11,7 @@ import (
 
 type PublishListResponse struct {
 	json_model.Response
-	VideoList []*model.Video `json:"video_list,omitempty"`
+	VideoList []*json_model.Video `json:"video_list,omitempty"`
 }
 
 func PublishList(c *gin.Context) {
@@ -23,10 +22,10 @@ func PublishList(c *gin.Context) {
 	//转到发布服务
 	videoList, err := service.PublishList(userId, token)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, service.Response{StatusCode: 1, StatusMsg: err.Error()})
+		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: err.Error()})
 	}
 	c.JSON(http.StatusOK, PublishListResponse{
-		Response:  service.Response{StatusCode: 0},
+		Response:  json_model.Response{StatusCode: 0},
 		VideoList: videoList,
 	})
 }

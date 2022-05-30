@@ -45,7 +45,7 @@ func GetVideoList(userId int, latestTime string) ([]*json_model.Video, int64) {
 			Username:      authorOri.Username,
 			FollowCount:   authorOri.FollowCount,
 			FollowerCount: authorOri.FollowerCount,
-			IsFollow:      false, //待补充
+			IsFollow:      mapper.IsFollow(authorOri.Id, userId), //userId为当前登录的用户id
 		}
 		video := json_model.Video{
 			Id:            videoOri.Id,

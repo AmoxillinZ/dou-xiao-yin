@@ -11,7 +11,7 @@ import (
 )
 
 func FavoriteList(c *gin.Context) {
-
+	
 }
 
 func FavoriteAction(c *gin.Context) {
@@ -27,7 +27,7 @@ func FavoriteAction(c *gin.Context) {
 	if userId == 0 || !service.VerifyUser(userId, token) { // 鉴权失败
 		fmt.Println("token = ", token, "鉴权失败")
 		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: "token失效"})
-	} else { // 鉴权成功
+	} else {                 // 鉴权成功
 		if actionType == 1 { // 点赞操作
 			if err := service.FavoriteAction(videoId, userId); err != nil {
 				c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1})

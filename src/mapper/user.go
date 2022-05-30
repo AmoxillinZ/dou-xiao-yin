@@ -85,3 +85,13 @@ func DecreaseFollowCount(userId int) error {
 	result := db.Model(&user).UpdateColumn("follow_count", gorm.Expr("follow_count - ?", 1))
 	return result.Error
 }
+
+// IsFollow : 判断当前登录用户是否关注了目标用户
+func IsFollow(userId int, loginId int) bool {
+	if loginId == 0 {
+		return false
+	}
+	db := config.GetDefaultDb()
+	result := db.Where("user_id = ? and to_user_id = ?", loginId, userId).Find(&model.Relation{})
+	return result.RowsAffected > 0
+}

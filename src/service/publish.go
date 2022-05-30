@@ -1,6 +1,7 @@
 package service
 
 import (
+	"dou-xiao-yin/src/json_model"
 	"dou-xiao-yin/src/mapper"
 	"dou-xiao-yin/src/model"
 	"dou-xiao-yin/src/utils"
@@ -9,14 +10,14 @@ import (
 	"mime/multipart"
 )
 
-func PublishList(userId int, token string) ([]*model.Video, error) {
+func PublishList(userId int, token string) ([]*json_model.Video, error) {
 	// 用户权限的验证
 	err := TokenVerify(userId, token)
 	if err != nil {
 		return nil, err
 	}
 	// 根据用户找到其发布的视频列表
-	videoVos := make([]*Video, 0)
+	videoVos := make([]*json_model.Video, 0)
 	videos, err := mapper.GetVideosByAuthorId(userId)
 	if err != nil {
 		return nil, errors.New("获取信息失败")
@@ -26,19 +27,20 @@ func PublishList(userId int, token string) ([]*model.Video, error) {
 		return nil, errors.New("获取信息失败")
 	}
 	for _, video := range videos {
-		author := User{
+		author := json_model.User{
 			Id:            author.Id,
 			Username:      author.Username,
 			FollowCount:   author.FollowerCount,
 			FollowerCount: author.FollowCount,
-			IsFollow:      false, //待补充
+			IsFollow:      mapper.IsFollow(author.Id, userId), //userId为当前登录的用户id
 		}
-		video := Video{
+		video := json_model.Video{
 			Id:            video.Id,
 			Author:        author,
 			FavoriteCount: video.FavoriteCount,
 			CommentCount:  video.CommentCount,
 			IsFavorite:    mapper.IsFavorite(video.Id, userId),
+			Title:         video.Title,
 		}
 		videoVos = append(videoVos, &video)
 	}
