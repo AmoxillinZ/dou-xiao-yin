@@ -72,5 +72,4 @@ func parseUrl(videos []*json_model.Video) {
 		video.PlayUrl = videoUrl
 		video.CoverUrl = coverUrl
 	}
-
 }

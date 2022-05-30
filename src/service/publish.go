@@ -16,8 +16,35 @@ func PublishList(userId int, token string) ([]*model.Video, error) {
 		return nil, err
 	}
 	// 根据用户找到其发布的视频列表
+	videoVos := make([]*Video, 0)
+	videos, err := mapper.GetVideosByAuthorId(userId)
+	if err != nil {
+		return nil, errors.New("获取信息失败")
+	}
+	author, err := mapper.GetUserById(userId)
+	if err != nil {
+		return nil, errors.New("获取信息失败")
+	}
+	for _, video := range videos {
+		author := User{
+			Id:            author.Id,
+			Username:      author.Username,
+			FollowCount:   author.FollowerCount,
+			FollowerCount: author.FollowCount,
+			IsFollow:      false, //待补充
+		}
+		video := Video{
+			Id:            video.Id,
+			Author:        author,
+			FavoriteCount: video.FavoriteCount,
+			CommentCount:  video.CommentCount,
+			IsFavorite:    mapper.IsFavorite(video.Id, userId),
+		}
+		videoVos = append(videoVos, &video)
+	}
+	parseUrl(videoVos)
 	// 返回视频列表
-	return nil, nil
+	return videoVos, nil
 }
 
 func PublishVideo(file *multipart.FileHeader, token string, title string) error {

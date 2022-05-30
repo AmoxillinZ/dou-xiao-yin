@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type PublishListResponse struct {
@@ -16,11 +17,18 @@ type PublishListResponse struct {
 
 func PublishList(c *gin.Context) {
 	// TODO 之后再补充,先写 oss 服务了
-	//token := c.Query("token")
-	//userId, _ := strconv.Atoi(c.Query("user_id"))
-	//
-	////转到发布服务
-	//videoList, err := service.PublishList(userId, token)
+	token := c.Query("token")
+	userId, _ := strconv.Atoi(c.Query("user_id"))
+
+	//转到发布服务
+	videoList, err := service.PublishList(userId, token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, service.Response{StatusCode: 1, StatusMsg: err.Error()})
+	}
+	c.JSON(http.StatusOK, PublishListResponse{
+		Response:  service.Response{StatusCode: 0},
+		VideoList: videoList,
+	})
 }
 
 func PublishAction(c *gin.Context) {
