@@ -61,6 +61,8 @@ func UploadVideo(file *multipart.FileHeader, video *model.Video) error {
 		}
 	}(src)
 
+	// TODO: 获取文件封面
+
 	// 将文件流上传至视频目录下
 	path := "videos/" + strconv.Itoa(video.AuthorId) + "/" + strconv.Itoa(video.Id) + ".mp4"
 	err = bucket.PutObject(path, src)
