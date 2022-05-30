@@ -1,11 +1,12 @@
 #数据库配置
 database:
   dbtype: mysql
-  host: 202.204.100.175
+  host: 47.95.209.146
   port: 3306
   config: charset=utf8mb4&parseTime=True&loc=Local
   dbname: dou_xiao_yin
-  username: root
+  username: user
+
   password: nbroot
 #  静态资源路径、请求静态资源的ip和端口
 resource:

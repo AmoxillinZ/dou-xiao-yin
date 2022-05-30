@@ -1,10 +1,11 @@
 /**
  * @Author: Amo
- * @Description: 返回给客户端的所有结构体
+ * @Description: 返回给客户端的所有结构体。
+	（之前放在service包里，会造成mapper和service循环依赖，就单独放一个包中）
  * @Date: 2022/5/22 15:59
- */
+*/
 
-package service
+package json_model
 
 type Response struct {
 	StatusCode int32  `json:"status_code"`
@@ -31,7 +32,7 @@ type Comment struct {
 
 type User struct {
 	Id            int    `json:"id,omitempty"`
-	Username      string `json:"username,omitempty"`
+	Username      string `json:"name,omitempty"`
 	FollowCount   int    `json:"follow_count,omitempty"`
 	FollowerCount int    `json:"follower_count,omitempty"`
 	IsFollow      bool   `json:"is_follow,omitempty"`

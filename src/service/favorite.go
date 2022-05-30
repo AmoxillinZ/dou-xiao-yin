@@ -6,28 +6,19 @@
 
 package service
 
-import "dou-xiao-yin/src/mapper"
+import (
+	"dou-xiao-yin/src/mapper"
+	"errors"
+)
 
 func FavoriteAction(videoId int, userId int) error {
-	// TODO 原子操作
-	//1、相应视频的点赞数+1； 2、生成点赞记录
-	if err := mapper.IncreaseFavoriteCount(videoId); err != nil {
-		return err
+	// 先检验是否已经赞过
+	if mapper.IsFavorite(videoId, userId) {
+		return errors.New("已经点过赞")
 	}
-	if err := mapper.FavoriteAction(videoId, userId); err != nil {
-		return err
-	}
-	return nil
+	return mapper.FavoriteAction(videoId, userId)
 }
 
-func DisFavoriteAction(videoId int, userId int) error {
-	// TODO 原子操作
-	//1、相应视频的点赞数-1； 2、删除点赞记录
-	if err := mapper.DecreaseFavoriteCount(videoId); err != nil {
-		return err
-	}
-	if err := mapper.DisFavoriteAction(videoId, userId); err != nil {
-		return err
-	}
-	return nil
+func UnFavoriteAction(videoId int, userId int) error {
+	return mapper.UnFavoriteAction(videoId, userId)
 }

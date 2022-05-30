@@ -30,3 +30,17 @@ func TestGetUserByToken(t *testing.T) {
 		fmt.Println(err)
 	}
 }
+
+func TestIncreaseFollowerCount(t *testing.T) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	IncreaseFollowerCount(1)
+	DecreaseFollowerCount(2)
+}
+
+func TestIncreaseFollowCount(t *testing.T) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	IncreaseFollowCount(1)
+	DecreaseFollowCount(2)
+}

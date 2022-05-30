@@ -39,4 +39,12 @@ func InitRouter(r *gin.Engine) {
 		publish.GET("/list/", controller.PublishList)
 		publish.POST("/action/", controller.PublishAction)
 	}
+
+	// 关注路由组
+	relation := apiRouter.Group("/relation")
+	{
+		relation.POST("/action/", controller.RelationAction)
+		relation.GET("/follow/list/", controller.FollowList)
+		relation.GET("/follower/list", controller.FollowerList)
+	}
 }

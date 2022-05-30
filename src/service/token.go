@@ -1,17 +1,17 @@
 package service
 
 import (
-	"dou-xiao-yin/src/mapper"
+	"dou-xiao-yin/src/utils"
 	"errors"
 )
 
 func TokenVerify(userId int, token string) error {
-	user, err := mapper.GetUserById(userId)
-	if err != nil {
-		return errors.New("没有找到用户")
+	if userId == 0 {
+		return errors.New("请求中没有user_id")
 	}
-	if user.Token != token {
-		return errors.New("用户令牌无效")
+	verifiedUserId, err := utils.GetIdFromToken(token)
+	if err != nil || verifiedUserId != userId {
+		return errors.New("校验用户失败")
 	}
 	return nil
 }

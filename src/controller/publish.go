@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"dou-xiao-yin/src/json_model"
 	"dou-xiao-yin/src/service"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -9,8 +10,8 @@ import (
 )
 
 type PublishListResponse struct {
-	service.Response
-	VideoList []*service.Video `json:"video_list,omitempty"`
+	json_model.Response
+	VideoList []*json_model.Video `json:"video_list,omitempty"`
 }
 
 func PublishList(c *gin.Context) {
@@ -21,10 +22,10 @@ func PublishList(c *gin.Context) {
 	//转到发布服务
 	videoList, err := service.PublishList(userId, token)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, service.Response{StatusCode: 1, StatusMsg: err.Error()})
+		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: err.Error()})
 	}
 	c.JSON(http.StatusOK, PublishListResponse{
-		Response:  service.Response{StatusCode: 0},
+		Response:  json_model.Response{StatusCode: 0},
 		VideoList: videoList,
 	})
 }
@@ -34,12 +35,12 @@ func PublishAction(c *gin.Context) {
 	token := c.Request.Form.Get("token")
 	title := c.Request.Form.Get("title")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, service.Response{StatusCode: 1, StatusMsg: err.Error()})
+		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: err.Error()})
 	}
 	err = service.PublishVideo(file, token, title)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusBadRequest, service.Response{StatusCode: 1, StatusMsg: err.Error()})
+		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: err.Error()})
 	}
-	c.JSON(http.StatusOK, service.Response{StatusCode: 0})
+	c.JSON(http.StatusOK, json_model.Response{StatusCode: 0})
 }
