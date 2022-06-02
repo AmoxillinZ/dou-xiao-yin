@@ -25,3 +25,12 @@ func TestFavoriteAction(t *testing.T) {
 	UnFavoriteAction(1, 2)
 
 }
+
+func TestFavoriteList(t *testing.T) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	list := FavoriteList(6)
+	for _, v := range list {
+		fmt.Println(v)
+	}
+}

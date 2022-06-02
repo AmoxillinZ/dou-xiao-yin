@@ -29,7 +29,6 @@ func IsFavorite(videoId int, userId int) bool {
 }
 
 // FavoriteAction : 点赞原子操作：向点赞表中插入一条记录、video点赞数+1
-// TODO 因为客户端不能正确区分是否点赞，所以不能正确请求action是点赞还是取消操作，因此可能会出现同一用户对同一视频多次点赞的情况
 func FavoriteAction(videoId int, userId int) error {
 	db := config.GetDefaultDb()
 	err := db.Transaction(func(tx *gorm.DB) error {
@@ -64,4 +63,13 @@ func UnFavoriteAction(videoId int, userId int) error {
 		return nil
 	})
 	return err
+}
+
+// FavoriteList : 获取user点过赞的视频列表，返回为model.video，而非返回给客户端的video类型
+func FavoriteList(userId int) ([]*model.Video, error) {
+	videos := make([]*model.Video, 0)
+	db := config.GetDefaultDb()
+	subQuery := db.Select("video_id").Where("user_id = ?", userId).Table("favorite")
+	result := db.Where("id in (?)", subQuery).Find(&videos)
+	return videos, result.Error
 }
