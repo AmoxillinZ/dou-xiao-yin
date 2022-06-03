@@ -47,4 +47,11 @@ func InitRouter(r *gin.Engine) {
 		relation.GET("/follow/list/", controller.FollowList)
 		relation.GET("/follower/list", controller.FollowerList)
 	}
+
+	// 评论路由组
+	comment := apiRouter.Group("/comment")
+	{
+		comment.GET("/list/", controller.CommentList)
+		comment.POST("/action/", controller.CommentAction)
+	}
 }
