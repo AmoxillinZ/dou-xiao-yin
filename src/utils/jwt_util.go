@@ -77,6 +77,7 @@ func AuthenticateToken(tokenString string) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -84,7 +85,7 @@ func AuthenticateToken(tokenString string) error {
 func tokenString2claims(tokenString string) (*Claims, error) {
 
 	if tokenString == "" {
-		return nil, errors.New("用户权限不足，token 为空。")
+		return nil, errors.New("用户权限不足，token 为空")
 	}
 
 	claims := &Claims{}
@@ -93,7 +94,7 @@ func tokenString2claims(tokenString string) (*Claims, error) {
 	})
 
 	if err != nil || !token.Valid {
-		return nil, errors.New("用户权限不足，token 无法解析或 token 已过期。")
+		return nil, errors.New("用户权限不足，token 无法解析或 token 已过期")
 	}
 
 	return claims, nil

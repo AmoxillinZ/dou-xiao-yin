@@ -65,3 +65,10 @@ func DecreaseFavoriteCount(videoId int) error {
 	result := db.Model(&video).UpdateColumn("favorite_count", gorm.Expr("favorite_count - ?", 1))
 	return result.Error
 }
+
+func GetAuthorIdByVideoId(videoId int) (int, error) {
+	db := config.GetDefaultDb()
+	video := &model.Video{Id: videoId}
+	result := db.First(&video)
+	return video.AuthorId, result.Error
+}

@@ -6,7 +6,6 @@ database:
   config: charset=utf8mb4&parseTime=True&loc=Local
   dbname: dou_xiao_yin
   username: user
-
   password: nbroot
 #  静态资源路径、请求静态资源的ip和端口
 resource:
