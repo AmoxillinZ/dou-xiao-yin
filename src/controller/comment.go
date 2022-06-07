@@ -18,7 +18,7 @@ type CommentListResponse struct {
 
 type CommentResponse struct {
 	json_model.Response
-	Comment *json_model.Comment `json:"comment,omitempty"`
+	Comment json_model.Comment `json:"comment,omitempty"`
 }
 
 func CommentList(c *gin.Context) {
@@ -50,11 +50,6 @@ func CommentList(c *gin.Context) {
 				StatusCode: 1,
 				StatusMsg:  err.Error()},
 		})
-	}
-
-	for i, comment := range comments {
-		fmt.Println(i)
-		fmt.Println(comment.Content)
 	}
 
 	c.JSON(http.StatusOK, CommentListResponse{
@@ -97,20 +92,12 @@ func CommentAction(c *gin.Context) {
 				StatusMsg:  err.Error()},
 		})
 	}
-	commentText := c.Query("comment_text")
-
-	commentId, err := strconv.Atoi(c.Query("comment_id"))
-	if err != nil {
-		err := errors.New("获取 comment id 失败")
-		c.JSON(http.StatusBadRequest, CommentResponse{
-			Response: json_model.Response{
-				StatusCode: 1,
-				StatusMsg:  err.Error()},
-		})
-	}
 
 	// 发布评论
 	if actionType == 1 {
+
+		commentText := c.Query("comment_text")
+
 		comment, err := service.AddComment(userId, videoId, commentText)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, CommentResponse{
@@ -129,7 +116,18 @@ func CommentAction(c *gin.Context) {
 
 	// 删除评论
 	if actionType == 2 {
-		err := service.DeleteComment(userId, videoId, commentId)
+
+		commentId, err := strconv.Atoi(c.Query("comment_id"))
+		if err != nil {
+			err := errors.New("获取 comment id 失败")
+			c.JSON(http.StatusBadRequest, CommentResponse{
+				Response: json_model.Response{
+					StatusCode: 1,
+					StatusMsg:  err.Error()},
+			})
+		}
+
+		err = service.DeleteComment(userId, videoId, commentId)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, CommentResponse{
 				Response: json_model.Response{

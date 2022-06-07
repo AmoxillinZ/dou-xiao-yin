@@ -6,36 +6,37 @@ import (
 	"dou-xiao-yin/src/model"
 )
 
-func AddComment(userId int, videoId int, commentText string) (*json_model.Comment, error) {
+func AddComment(userId int, videoId int, commentText string) (json_model.Comment, error) {
 
+	commentRes := json_model.Comment{}
 	// 新增评论
 	comment := &model.Comment{VideoId: videoId, UserId: userId, Content: commentText}
 	commentId, err := mapper.AddComment(comment)
 	if err != nil {
-		return nil, err
+		return commentRes, err
 	}
 
 	// 增加视频评论数
 	if err := mapper.AddCommentCount(videoId); err != nil {
-		return nil, err
+		return commentRes, err
 	}
 
 	// 获取数据库中 comment
 	comment, err = mapper.GetCommentById(commentId)
 	if err != nil {
-		return nil, err
+		return commentRes, err
 	}
 
 	// 获取视频 authorId
 	authorId, err := mapper.GetAuthorIdByVideoId(videoId)
 	if err != nil {
-		return nil, err
+		return commentRes, err
 	}
 
 	// 获取当前评论用户的数据
 	user, err := mapper.GetUserById(userId)
 	if err != nil {
-		return nil, err
+		return commentRes, err
 	}
 
 	// 创建 response 中的 user 结构
@@ -48,7 +49,7 @@ func AddComment(userId int, videoId int, commentText string) (*json_model.Commen
 
 	// 创建 response 中的 comment 结构
 	createAt := comment.CreateTime.Time.Format("01-02") // 评论发布日期 mm-dd
-	commentRes := &json_model.Comment{Id: commentId, User: *userRes, Content: commentText, CreateDate: createAt}
+	commentRes = json_model.Comment{Id: commentId, User: *userRes, Content: commentText, CreateDate: createAt}
 
 	return commentRes, nil
 }
@@ -59,7 +60,7 @@ func DeleteComment(userId int, videoId int, commentId int) error {
 	if err := mapper.DeleteComment(comment); err != nil {
 		return err
 	}
-	
+
 	// 减少视频评论数
 	if err := mapper.DeleteCommentCount(videoId); err != nil {
 		return err
