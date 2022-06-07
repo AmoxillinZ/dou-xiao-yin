@@ -11,11 +11,8 @@ import (
 )
 
 func PublishList(userId int, token string) ([]*json_model.Video, error) {
-	// 用户权限的验证
-	err := TokenVerify(userId, token)
-	if err != nil {
-		return nil, err
-	}
+	// 获得当前登录用户
+	loginId, _ := utils.GetIdFromToken(token)
 	// 根据用户找到其发布的视频列表
 	videoVos := make([]*json_model.Video, 0)
 	videos, err := mapper.GetVideosByAuthorId(userId)
@@ -32,14 +29,14 @@ func PublishList(userId int, token string) ([]*json_model.Video, error) {
 			Username:      author.Username,
 			FollowCount:   author.FollowerCount,
 			FollowerCount: author.FollowCount,
-			IsFollow:      mapper.IsFollow(author.Id, userId), //userId为当前登录的用户id
+			IsFollow:      mapper.IsFollow(author.Id, loginId), //判断当前登录用户是否关注了author
 		}
 		video := json_model.Video{
 			Id:            video.Id,
 			Author:        author,
 			FavoriteCount: video.FavoriteCount,
 			CommentCount:  video.CommentCount,
-			IsFavorite:    mapper.IsFavorite(video.Id, userId),
+			IsFavorite:    mapper.IsFavorite(video.Id, loginId), //判断当前登录用户是否给该video点赞
 			Title:         video.Title,
 		}
 		videoVos = append(videoVos, &video)
@@ -67,9 +64,14 @@ func PublishVideo(file *multipart.FileHeader, token string, title string) error 
 
 	// 上传视频文件到 oss
 	// TODO: implement 添加上传封面的功能
-	err = utils.UploadVideo(file, video)
+	var videoLink string
+	err, videoLink = utils.UploadVideo(file, video)
+	videoLink = "http://dou-xiao-yin.oss-cn-beijing.aliyuncs.com:80/" + videoLink
 	if err != nil {
 		return err
 	}
+	//fmt.Println("^^ videoLink = ", videoLink)
+	// 获得刚刚上传的视频，截取封面并上传封面
+	utils.UploadCover(videoLink)
 	return nil
 }
