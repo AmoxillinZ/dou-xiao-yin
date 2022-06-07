@@ -15,6 +15,11 @@ func AddComment(userId int, videoId int, commentText string) (*json_model.Commen
 		return nil, err
 	}
 
+	// 增加视频评论数
+	if err := mapper.AddCommentCount(videoId); err != nil {
+		return nil, err
+	}
+
 	// 获取数据库中 comment
 	comment, err = mapper.GetCommentById(commentId)
 	if err != nil {
@@ -26,9 +31,8 @@ func AddComment(userId int, videoId int, commentText string) (*json_model.Commen
 	if err != nil {
 		return nil, err
 	}
-	// fmt.Println(authorId)
 
-	// 获取当前评论用户的数据 (isFollow 先统一设置为 false)
+	// 获取当前评论用户的数据
 	user, err := mapper.GetUserById(userId)
 	if err != nil {
 		return nil, err
@@ -53,6 +57,11 @@ func DeleteComment(userId int, videoId int, commentId int) error {
 
 	comment := &model.Comment{Id: commentId, VideoId: videoId, UserId: userId}
 	if err := mapper.DeleteComment(comment); err != nil {
+		return err
+	}
+	
+	// 减少视频评论数
+	if err := mapper.DeleteCommentCount(videoId); err != nil {
 		return err
 	}
 

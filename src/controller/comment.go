@@ -120,8 +120,9 @@ func CommentAction(c *gin.Context) {
 			})
 		}
 
+		fmt.Println("id", comment.Id, ", user", comment.User, ", content", comment.Content, ", time", comment.CreateDate)
 		c.JSON(http.StatusOK, CommentResponse{
-			Response: json_model.Response{StatusCode: 0, StatusMsg: "评论成功"},
+			Response: json_model.Response{StatusCode: 0},
 			Comment:  comment,
 		})
 	}

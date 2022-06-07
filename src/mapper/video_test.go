@@ -21,3 +21,12 @@ func TestGetAuthorIdByVideoId(t *testing.T) {
 	}
 	fmt.Println(uid)
 }
+
+func TestAddCommentCount(t *testing.T) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	err := AddCommentCount(2)
+	if err != nil {
+		return
+	}
+}
