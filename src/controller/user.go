@@ -33,19 +33,19 @@ func Login(c *gin.Context) {
 	// 在 service 根据用户名和密码查找用户
 	username := c.Query("username")
 	password := c.Query("password")
+
 	user, err := service.UserLogin(username, password)
 	if err != nil {
-		c.JSON(http.StatusOK, UserLoginResponse{
+		c.JSON(http.StatusBadRequest, UserLoginResponse{
 			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
-	} else {
-		// 返回数据
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: json_model.Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    user.Token,
-		})
 	}
+	// 返回数据
+	c.JSON(http.StatusOK, UserLoginResponse{
+		Response: json_model.Response{StatusCode: 0},
+		UserId:   user.Id,
+		Token:    user.Token,
+	})
 }
 
 // UserInfo 相应用户信息获取
@@ -53,17 +53,19 @@ func UserInfo(c *gin.Context) {
 	//使用 token 来获取用户信息
 	id, _ := strconv.Atoi(c.Query("user_id"))
 	token := c.Query("token")
+
 	user, err := service.GetUserInfo(id, token)
 	if err != nil {
-		c.JSON(http.StatusOK, UserLoginResponse{
+		c.JSON(http.StatusBadRequest, UserLoginResponse{
 			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
-	} else {
-		c.JSON(http.StatusOK, UserInfoResponse{
-			Response: json_model.Response{StatusCode: 0},
-			User:     user,
-		})
 	}
+
+	c.JSON(http.StatusOK, UserInfoResponse{
+		Response: json_model.Response{StatusCode: 0},
+		User:     user,
+	})
+
 }
 
 // Register 响应用户注册

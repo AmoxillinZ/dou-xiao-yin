@@ -28,7 +28,7 @@ func Feed(c *gin.Context) {
 	token := c.Query("token")
 	latestTime := c.Query("latest_time")
 	// 根据token查找用户id
-	userId, _, _, _ := utils.ParseToken(token)
+	userId, _ := utils.GetIdFromToken(token)
 	videoList, nextTime := service.GetVideoList(userId, latestTime)
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  json_model.Response{StatusCode: 0},

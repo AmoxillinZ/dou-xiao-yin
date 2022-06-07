@@ -25,22 +25,16 @@ func RelationAction(c *gin.Context) {
 	// TODO 客户端不能返回user_id,先用token查出来
 	userId, _ = utils.GetIdFromToken(token)
 	if err = service.TokenVerify(userId, token); err != nil { // 鉴权失败
-		c.JSON(http.StatusOK, FeedResponse{
-			Response: json_model.Response{StatusCode: 1, StatusMsg: err.Error()},
-		})
+		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: err.Error()})
 		return
 	}
 	// 调用关注/取关方法
 	err = service.RelationAction(userId, toUserId, actionType)
 	if err != nil { // 操作失败
-		c.JSON(http.StatusOK, FeedResponse{
-			Response: json_model.Response{StatusCode: 2, StatusMsg: err.Error()},
-		})
+		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 2, StatusMsg: err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, FeedResponse{
-		Response: json_model.Response{StatusCode: 0},
-	})
+	c.JSON(http.StatusOK, json_model.Response{StatusCode: 0})
 	return
 }
 
