@@ -23,5 +23,25 @@ func TestFavoriteAction(t *testing.T) {
 	config.InitConf("../config/conf.yaml")
 	config.InitDefaultDbEngine()
 	UnFavoriteAction(1, 2)
+	FavoriteAction(1, 2)
+}
+
+func TestFavoriteList(t *testing.T) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	list, _ := FavoriteList(6)
+	for _, v := range list {
+		fmt.Println(v)
+	}
+}
+
+func BenchmarkFavoriteList(b *testing.B) {
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
+	b.ResetTimer()
+	FavoriteList(3)
+	//for _, v := range list {
+	//	fmt.Println(v)
+	//}
 
 }

@@ -95,7 +95,7 @@ func UserRegister(username string, password string) (*model.User, error) {
 // VerifyUser : 鉴权，校验传入的userId和token的一致性*/
 func VerifyUser(userId int, token string) bool {
 	//通过token校验的用户id与传入的相等，鉴权通过
-	parsedId, _, _, _ := utils.ParseToken(token)
+	parsedId, _ := utils.GetIdFromToken(token)
 	if userId == parsedId {
 		return true
 	}

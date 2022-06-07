@@ -10,8 +10,34 @@ import (
 	"strconv"
 )
 
+type FavoriteListResponse struct {
+	json_model.Response
+	FavoriteList []*json_model.Video `json:"video_list,omitempty"`
+}
+
 func FavoriteList(c *gin.Context) {
-	
+	userId, _ := strconv.Atoi(c.Query("user_id"))
+	token := c.Query("token")
+	loginId, verifyErr := utils.GetIdFromToken(token)
+	if verifyErr != nil {
+		c.JSON(http.StatusBadRequest, FavoriteListResponse{
+			Response: json_model.Response{StatusCode: 1},
+		})
+	}
+
+	favoriteList, err := service.FavoriteList(userId, loginId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, FavoriteListResponse{
+			Response: json_model.Response{StatusCode: 1},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, FavoriteListResponse{
+		Response:     json_model.Response{StatusCode: 0},
+		FavoriteList: favoriteList,
+	})
+	return
 }
 
 func FavoriteAction(c *gin.Context) {
@@ -19,7 +45,7 @@ func FavoriteAction(c *gin.Context) {
 	// 但旧版客户端不能返回user_id，只能通过token找user_id。5.22新版客户端不能触发点赞 = =
 	//userId, _ := strconv.Atoi(c.Query("user_id"))
 	token := c.Query("token")
-	userId, _, _, _ := utils.ParseToken(token)
+	userId, _ := utils.GetIdFromToken(token)
 	videoId, _ := strconv.Atoi(c.Query("video_id"))
 	actionType, _ := strconv.Atoi(c.Query("action_type")) //1-点赞，2-取消点赞
 
@@ -27,19 +53,18 @@ func FavoriteAction(c *gin.Context) {
 	if userId == 0 || !service.VerifyUser(userId, token) { // 鉴权失败
 		fmt.Println("token = ", token, "鉴权失败")
 		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: "token失效"})
-	} else {                 // 鉴权成功
+	} else { // 鉴权成功
 		if actionType == 1 { // 点赞操作
 			if err := service.FavoriteAction(videoId, userId); err != nil {
 				c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1})
-			} else {
-				c.JSON(http.StatusOK, json_model.Response{StatusCode: 0})
 			}
-		} else if actionType == 2 { // 取消点赞
+			c.JSON(http.StatusOK, json_model.Response{StatusCode: 0})
+		}
+		if actionType == 2 { // 取消点赞
 			if err := service.UnFavoriteAction(videoId, userId); err != nil {
 				c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1})
-			} else {
-				c.JSON(http.StatusOK, json_model.Response{StatusCode: 0})
 			}
+			c.JSON(http.StatusOK, json_model.Response{StatusCode: 0})
 		}
 	}
 
