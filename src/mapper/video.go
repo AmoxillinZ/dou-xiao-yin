@@ -72,3 +72,17 @@ func GetAuthorIdByVideoId(videoId int) (int, error) {
 	result := db.First(&video)
 	return video.AuthorId, result.Error
 }
+
+func AddCommentCount(videoId int) error {
+	db := config.GetDefaultDb()
+	video := model.Video{Id: videoId}
+	result := db.Model(&video).UpdateColumn("comment_count", gorm.Expr("comment_count + ?", 1))
+	return result.Error
+}
+
+func DeleteCommentCount(videoId int) error {
+	db := config.GetDefaultDb()
+	video := model.Video{Id: videoId}
+	result := db.Model(&video).UpdateColumn("comment_count", gorm.Expr("comment_count - ?", 1))
+	return result.Error
+}

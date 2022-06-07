@@ -18,7 +18,7 @@ type Video struct {
 	CommentCount  int       `gorm:"column:comment_count;type:bigint(20)" json:"comment_count"`
 	AuthorId      int       `gorm:"column:author_id;type:bigint(20)" json:"author_id"`
 	PublishTime   time.Time `gorm:"column:publish_time;type:timestamp;default:CURRENT_TIMESTAMP" json:"publish_time"`
-	Title         string    `gorm:"column:title;type:varchar(255)" json:"title"`
+	Title         string    `gorm:"column:title;type:varchar(255);not null" json:"title"`
 }
 
 func (m *Video) TableName() string {
