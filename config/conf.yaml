@@ -1,0 +1,21 @@
+#数据库配置
+database:
+  dbtype: mysql
+  host: 47.95.209.146
+  port: 3306
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  dbname: dou_xiao_yin
+  username: user
+  password: nbroot
+#  静态资源路径、请求静态资源的ip和端口
+resource:
+  staticPath: ./src/public
+  #  ip为静态资源所在ip
+  ip: dou-xiao-yin.oss-cn-beijing.aliyuncs.com
+  port: 80
+# 阿里云 oss 的配置
+oss:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  accessKeyId: LTAI5tSiPxdSeZTqyrVg35mW
+  accessKeySecret: fisOWkIhmWVmuFHvS7KdQSJ6pwsiOo
+  bucketName: dou-xiao-yin
