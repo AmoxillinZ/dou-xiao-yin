@@ -1,20 +1,14 @@
 package model
 
 import (
-	config2 "dou-xiao-yin/config"
+	"dou-xiao-yin/config"
 	"fmt"
 	"testing"
 )
 
-func TestUpdateFavoriteCount(t *testing.T) {
-	config2.InitConf("../config/conf.yaml")
-	config2.InitDefaultDbEngine()
-	IncreaseFavoriteCount(2)
-}
-
 func TestGetAuthorIdByVideoId(t *testing.T) {
-	config2.InitConf("../config/conf.yaml")
-	config2.InitDefaultDbEngine()
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
 	uid, err := GetAuthorIdByVideoId(2)
 	if err != nil {
 		return
@@ -23,8 +17,8 @@ func TestGetAuthorIdByVideoId(t *testing.T) {
 }
 
 func TestAddCommentCount(t *testing.T) {
-	config2.InitConf("../config/conf.yaml")
-	config2.InitDefaultDbEngine()
+	config.InitConf("../config/conf.yaml")
+	config.InitDefaultDbEngine()
 	err := AddCommentCount(2)
 	if err != nil {
 		return

@@ -49,22 +49,6 @@ func AddVideo(video *Video) error {
 	return result.Error
 }
 
-// IncreaseFavoriteCount : 相应video的点赞数+1
-func IncreaseFavoriteCount(videoId int) error {
-	video := Video{Id: videoId}
-	db := config.GetDefaultDb()
-	result := db.Model(&video).UpdateColumn("favorite_count", gorm.Expr("favorite_count + ?", 1))
-	return result.Error
-}
-
-// DecreaseFavoriteCount : 相应video的点赞数-1
-func DecreaseFavoriteCount(videoId int) error {
-	video := Video{Id: videoId}
-	db := config.GetDefaultDb()
-	result := db.Model(&video).UpdateColumn("favorite_count", gorm.Expr("favorite_count - ?", 1))
-	return result.Error
-}
-
 func GetAuthorIdByVideoId(videoId int) (int, error) {
 	db := config.GetDefaultDb()
 	video := &Video{Id: videoId}

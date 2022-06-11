@@ -8,7 +8,7 @@ package controller
 
 import (
 	"dou-xiao-yin/json_model"
-	service2 "dou-xiao-yin/service"
+	"dou-xiao-yin/service"
 	"dou-xiao-yin/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -24,12 +24,12 @@ func RelationAction(c *gin.Context) {
 	var err error
 	// TODO 客户端不能返回user_id,先用token查出来
 	userId, _ = utils.GetIdFromToken(token)
-	if err = service2.TokenVerify(userId, token); err != nil { // 鉴权失败
+	if err = service.TokenVerify(userId, token); err != nil { // 鉴权失败
 		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 1, StatusMsg: err.Error()})
 		return
 	}
 	// 调用关注/取关方法
-	err = service2.RelationAction(userId, toUserId, actionType)
+	err = service.RelationAction(userId, toUserId, actionType)
 	if err != nil { // 操作失败
 		c.JSON(http.StatusBadRequest, json_model.Response{StatusCode: 2, StatusMsg: err.Error()})
 		return
@@ -43,9 +43,9 @@ func FollowList(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.Query("user_id"))
 	token := c.Query("token")
 	loginId, _ := utils.GetIdFromToken(token)
-	c.JSON(http.StatusOK, service2.RelationResponse{
+	c.JSON(http.StatusOK, service.RelationResponse{
 		Response:  json_model.Response{StatusCode: 0},
-		VideoList: service2.FollowList(userId, loginId),
+		VideoList: service.FollowList(userId, loginId),
 	})
 }
 
@@ -54,8 +54,8 @@ func FollowerList(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.Query("user_id"))
 	token := c.Query("token")
 	loginId, _ := utils.GetIdFromToken(token)
-	c.JSON(http.StatusOK, service2.RelationResponse{
+	c.JSON(http.StatusOK, service.RelationResponse{
 		Response:  json_model.Response{StatusCode: 0},
-		VideoList: service2.FollowerList(userId, loginId),
+		VideoList: service.FollowerList(userId, loginId),
 	})
 }
