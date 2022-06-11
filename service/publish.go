@@ -69,7 +69,6 @@ func PublishVideo(file *multipart.FileHeader, token string, title string) error 
 	if err != nil {
 		return err
 	}
-	//fmt.Println("^^ videoLink = ", videoLink)
 	// 获得刚刚上传的视频，截取封面并上传封面
 	utils2.UploadCover(videoLink)
 	return nil

@@ -39,7 +39,8 @@ func GetVideosByTime(latestTime int64) []*Video {
 func GetVideosByAuthorId(authorId int) ([]*Video, error) {
 	videos := make([]*Video, 0)
 	db := config.GetDefaultDb()
-	result := db.Where("author_id = ?", authorId).Find(&videos)
+	// 结果倒序返回
+	result := db.Where("author_id = ?", authorId).Order("publish_time desc").Find(&videos)
 	return videos, result.Error
 }
 

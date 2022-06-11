@@ -68,7 +68,8 @@ func UnFavoriteAction(videoId int, userId int) error {
 func FavoriteList(userId int) ([]*Video, error) {
 	videos := make([]*Video, 0)
 	db := config.GetDefaultDb()
+	// 结果倒序返回
 	subQuery := db.Select("video_id").Where("user_id = ?", userId).Table("favorite")
-	result := db.Where("id in (?)", subQuery).Find(&videos)
+	result := db.Where("id in (?)", subQuery).Order("publish_time desc").Find(&videos)
 	return videos, result.Error
 }
